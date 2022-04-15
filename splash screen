@@ -1,0 +1,209 @@
+var currentScene = 0;
+
+var bodyX=100;
+var bodyY=100;
+var bitmojiHeight = 50;
+
+var drawBody = function(bodyX,bodyY,bitmojiHeight) {
+    stroke(0, 0, 0);
+    strokeWeight(1);
+    fill(248,217,189); //body
+    triangle(bodyX-(bitmojiHeight/150*18),bodyY+(bitmojiHeight/150*51),bodyX+(bitmojiHeight/150*18),bodyY+(bitmojiHeight/150*51),bodyX,bodyY+(bitmojiHeight/150*66));
+    line(bodyX-(bitmojiHeight/150*19),bodyY+(bitmojiHeight/150*69),bodyX-(bitmojiHeight/150*51),bodyY+(bitmojiHeight/150*33));
+    line(bodyX+(bitmojiHeight/150*19),bodyY+(bitmojiHeight/150*69),bodyX+(bitmojiHeight/150*49),bodyY+(bitmojiHeight/150*32));
+    line(bodyX-(bitmojiHeight/150*66),bodyY+(bitmojiHeight/150*65),bodyX-(bitmojiHeight/150*34),bodyY+(bitmojiHeight/150*34));
+    line(bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*65),bodyX+(bitmojiHeight/150*27),bodyY+(bitmojiHeight/150*28));
+    line(bodyX-(bitmojiHeight/150*72),bodyY+(bitmojiHeight/150*128),bodyX-(bitmojiHeight/150*65),bodyY+(bitmojiHeight/150*64));
+    line(bodyX-(bitmojiHeight/150*48),bodyY+(bitmojiHeight/150*128),bodyX-(bitmojiHeight/150*65),bodyY+(bitmojiHeight/150*68));
+    line(bodyX+(bitmojiHeight/150*84),bodyY+(bitmojiHeight/150*131),bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*66));
+    line(bodyX+(bitmojiHeight/150*63),bodyY+(bitmojiHeight/150*131),bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*66));
+};
+var drawHead = function(bodyX,bodyY,bitmojiHeight) {
+    fill(248,217,189);
+    ellipse(bodyX,bodyY,bitmojiHeight/150*94,bitmojiHeight/150*109); //head
+};
+var drawGlasses = function(bodyX,bodyY,bitmojiHeight) {
+    fill(255, 223, 185);
+    ellipse(bodyX-(bitmojiHeight/150*21),bodyY+(bitmojiHeight/150*1),bitmojiHeight/150*32,bitmojiHeight/150*34); //glasses
+    ellipse(bodyX+(bitmojiHeight/150*22),bodyY+(bitmojiHeight/150*1),bitmojiHeight/150*32,bitmojiHeight/150*34);
+    line(bodyX+(bitmojiHeight/150*7),bodyY-(bitmojiHeight/150*1),bodyX-(bitmojiHeight/150*7),bodyY);
+};
+var drawFace = function(bodyX,bodyY,bitmojiHeight) {
+    ellipse(bodyX-(bitmojiHeight/150*19),bodyY-(bitmojiHeight/150*22),bitmojiHeight/150*20,bitmojiHeight/150*4); //eyebrows
+    ellipse(bodyX+(bitmojiHeight/150*20),bodyY-(bitmojiHeight/150*22),bitmojiHeight/150*20,bitmojiHeight/150*4);
+    fill(99, 88, 42);
+    ellipse(bodyX-(bitmojiHeight/150*19),bodyY-(bitmojiHeight/150*5),bitmojiHeight/150*15,bitmojiHeight/150*8); //eyes
+    ellipse(bodyX+(bitmojiHeight/150*20),bodyY-(bitmojiHeight/150*5),bitmojiHeight/150*15,bitmojiHeight/150*8);
+    line(bodyX-(bitmojiHeight/150*27),bodyY-(bitmojiHeight/150*5),bodyX-(bitmojiHeight/150*32),bodyY-(bitmojiHeight/150*3)); //eyelashes
+    line(bodyX+(bitmojiHeight/150*28),bodyY-(bitmojiHeight/150*5),bodyX+(bitmojiHeight/150*33),bodyY-(bitmojiHeight/150*3));
+    fill(248,217,189);
+    triangle(bodyX-(bitmojiHeight/150*6),bodyY+(bitmojiHeight/150*17),bodyX,bodyY+(bitmojiHeight/150*4),bodyX+(bitmojiHeight/150*8),bodyY+(bitmojiHeight/150*17)); //nose
+    arc(bodyX+(bitmojiHeight/150*1),bodyY+(bitmojiHeight/150*26),bitmojiHeight/150*19,bitmojiHeight/150*12,6,176); //mouth
+};
+var drawHair = function(bodyX,bodyY,bitmojiHeight) {
+    noStroke();
+    fill(82, 76, 51);
+    arc(bodyX-(bitmojiHeight/150*43),bodyY+(bitmojiHeight/150*107),bitmojiHeight/150*18,bitmojiHeight/150*-283,3,185); //hair
+    arc(bodyX+(bitmojiHeight/150*44),bodyY+(bitmojiHeight/150*107),bitmojiHeight/150*18,bitmojiHeight/150*-283,-3,174);
+    arc(bodyX,bodyY-(bitmojiHeight/150*21),bitmojiHeight/150*94,bitmojiHeight/150*-84,-17,192);
+    fill(248,217,189);
+    triangle(bodyX-(bitmojiHeight/150*5),bodyY-(bitmojiHeight/150*13),bodyX-(bitmojiHeight/150*7),bodyY-(bitmojiHeight/150*42),bodyX+(bitmojiHeight/150*5),bodyY-(bitmojiHeight/150*1));
+};
+var drawHat = function(bodyX,bodyY,bitmojiHeight) {
+    fill(38, 62, 87);
+    arc(bodyX,bodyY-(bitmojiHeight/150*36),bitmojiHeight/150*91,bitmojiHeight/150*-67,-9,188); //hat
+};
+var drawInitials = function(bodyX,bodyY,bitmojiHeight) {
+    stroke(0, 0, 0);
+    noFill(); //Initials
+    arc(bodyX-(bitmojiHeight/150*6),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*29,bitmojiHeight/150*33,80,295);
+    arc(bodyX+(bitmojiHeight/150*20),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*30,bitmojiHeight/150*34,63,301);
+    arc(bodyX-(bitmojiHeight/150*3),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*33,bitmojiHeight/150*34,80,280);
+    arc(bodyX+(bitmojiHeight/150*23),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*33,bitmojiHeight/150*34,80,280);
+};
+var drawBitmojiBody = function(bodyX,bodyY,bitmojiHeight) {
+    drawBody(bodyX,bodyY,bitmojiHeight);
+    drawInitials(bodyX,bodyY,bitmojiHeight);
+};
+var drawBitmojiHead = function(bodyX,bodyY,bitmojiHeight) {
+    drawHead(bodyX,bodyY,bitmojiHeight);
+    drawGlasses(bodyX,bodyY,bitmojiHeight);
+    drawFace(bodyX,bodyY,bitmojiHeight);
+    drawHair(bodyX,bodyY,bitmojiHeight);
+    drawHat(bodyX,bodyY,bitmojiHeight);
+};
+var drawBitmoji2 = function(bodyX,bodyY,bitmojiHeight) {
+    drawBitmojiBody(bodyX,bodyY,bitmojiHeight);
+    drawBitmojiHead(bodyX,bodyY,bitmojiHeight);
+};  
+
+var drawBitmoji = function(meX, meY, meSize){
+//hair
+fill(82, 57, 8);
+rect((meX+129*meSize/100), (meY+103*meSize/100), meSize/100*117, meSize/100*107, 10);
+noStroke();
+ellipse(meX+188*meSize/100, meY+106*meSize/100, meSize/100*118, meSize/100*100);
+//head
+noStroke();
+fill (232, 200, 135);
+ellipse (meX+188*meSize/100, meY+125*meSize/100, meSize/100*92, meSize/100*100);
+//eyes
+fill(252, 247, 252);
+ellipse(meX+163*meSize/100, meY+120*meSize/100, meSize/100*15, meSize/100*10);
+ellipse(meX+210*meSize/100, meY+120*meSize/100, meSize/100*15, meSize/100*10);
+fill(140, 94, 8);
+ellipse(meX+163*meSize/100, meY+120*meSize/100, meSize/100*9, meSize/100*9);
+ellipse(meX+210*meSize/100, meY+120*meSize/100, meSize/100*9, meSize/100*9);
+fill(8, 8, 8);
+ellipse(meX+210*meSize/100, meY+120*meSize/100, meSize/100*5, meSize/100*5);
+ellipse(meX+163*meSize/100, meY+120*meSize/100, meSize/100*5, meSize/100*5);
+//eyebrows
+fill(82, 57, 8);
+rect(meX+154*meSize/100, meY+106*meSize/100, meSize/100*17, meSize/100*3, 10);
+rect(meX+202*meSize/100, meY+106*meSize/100, meSize/100*17, meSize/100*3, 10);
+//nose
+fill(217, 186, 123);
+rect(meX+183*meSize/100, meY+121*meSize/100, meSize/100*10, meSize/100*16, 10);
+ellipse(meX+188*meSize/100, meY+135*meSize/100, meSize/100*15, meSize/100*10);
+//mouth
+strokeWeight(10);
+fill(255, 0, 0);
+arc(meX+183*meSize/100, meY+157*meSize/100, meSize/100*41, meSize/100*153, -5, -4);
+rect(meX+172*meSize/100, meY+155*meSize/100, meSize/100*18, meSize/100*1);
+
+//neck
+fill(232, 200, 135);
+rect(meX+170*meSize/100, meY+168*meSize/100, meSize/100*34, meSize/100*21);
+//shirt
+fill(12, 32, 150);
+rect(meX+134*meSize/100, meY+189*meSize/100, meSize/100*110, meSize/100*56, 20);
+fill(247, 10, 53);
+text("AS",meX+161*meSize/100, meY+204*meSize/100, meSize/100*100, meSize/100*100);
+};
+
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};//variable with capital letter = class name// this is a constructor
+
+Button.prototype.draw = function() {
+    fill(0, 234, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var instructions = new Button({
+    x: 159,
+    y: 241,
+    label: "instructions",
+    onClick: function() {
+        currentScene = 1;
+    }
+});
+
+var startButton = new Button({
+    x: 128,
+    y: 307,
+    label: "Play GAME!",
+    onClick: function() {
+        currentScene = 2;
+    }
+});
+
+mouseClicked = function() {
+    if (currentScene === 0)
+    {
+    instructions.handleMouseClick();
+    startButton.handleMouseClick();
+    }
+};
+
+var splash = function() {
+    background(225, 208, 237);
+    drawBitmoji(214,-32,70);
+    drawBitmoji2(51,47,91);
+    textSize(25);
+    text("Fishing for Numbers", 108, 175);
+    startButton.draw();
+    instructions.draw();
+};
+
+
+var inst = function(){
+    background(255, 0, 0);
+};
+
+
+draw = function() {
+    if (currentScene === 0)
+    {
+        splash();
+    }
+    else if (currentScene === 1) {
+        inst();
+    }
+    else {//play game
+    }
+};
+
