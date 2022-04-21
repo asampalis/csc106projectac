@@ -1,6 +1,12 @@
 var num = [];// global variable array to store random number values (-4,4)
+
+var playerTurn = 0;
+var player1score = 0;
+var player2score = 0;
+
 for (var i = 0; i < 25; i++){
-    num.push(round(random(-4,4)));
+    num.push(round(random(-4,-1)));
+    num.push(round(random(1,4)));
 }
 
 var Tile = function (x,y) { // creates tiles (constructor function)
@@ -16,22 +22,26 @@ var NUM_ROWS = 5; // number of rows
 // global variables 
 for (var i = 0; i < NUM_COLS; i++) {
     for (var j = 0; j < NUM_ROWS; j++){
-        var tileX = i * 75 + 48;
-        var tileY = j * 59 + 53;
+        var tileX = i * 77 + 46;
+        var tileY = j * 67 + 87;
         tiles.push(new Tile (tileX, tileY));
     }//tile positiooning 
 }
 
 Tile.prototype.draw = function() {
-    fill(230, 198, 202);//card color
+    fill(203, 200, 230);//card color
     strokeWeight(2);//outline of the card
     rectMode(CENTER);
     rect(this.x, this.y, this.size, this.size, 10);//size of card
     fill(13, 12, 12);
+    textSize(24);
     text(num[i], this.x, this.y, this.size, this.size);//number on back of the card (-4 - 4)
+    num[12] = 0; //starting center number = 0
     };
     
 for (var i = 0; i < tiles.length; i++)
 {tiles[i].draw();}
 
-
+var draw = function() {
+     
+};
