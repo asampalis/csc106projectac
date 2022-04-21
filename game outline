@@ -9,13 +9,29 @@ for (var i = 0; i < 25; i++){
     num.push(round(random(1,4)));
 }
 
-var Tile = function (x,y) { // creates tiles (constructor function)
+var Tile = function (x,y,face,color) { // creates tiles (constructor function)
     this.x = x;
     this.y = y;
     this.size = 56;
+    this.color = color;
+    this.face = face;
+    this.isFaceUp = false;//boolean (either true or false) 
 };
 
 var tiles = [];// empty array for tiles
+
+//is under mouse function = gives paramaters to the tiles so you can click them
+Tile.prototype.isUnderMouse = function(x, y) {
+    return x >= this.x && x <= this.x + this.size  &&
+        y >= this.y && y <= this.y + this.size;
+};// geometry test to see if its under the mouse 
+
+
+mouseClicked = function(){
+    if (Tile.isUnderMouse(mouseX, mouseY))     {
+        this.isFaceUp = true;
+    }
+};
 
 var NUM_COLS = 5;// number of columns
 var NUM_ROWS = 5; // number of rows
@@ -28,8 +44,15 @@ for (var i = 0; i < NUM_COLS; i++) {
     }//tile positiooning 
 }
 
+    
 Tile.prototype.draw = function() {
-    fill(203, 200, 230);//card color
+   if(this.isFaceUp) {
+        fill(240, 201, 201);
+    }
+    else{
+        fill(194, 194, 237);
+    }
+   // fill(203, 200, 230);//card color
     strokeWeight(2);//outline of the card
     rectMode(CENTER);
     rect(this.x, this.y, this.size, this.size, 10);//size of card
@@ -37,11 +60,14 @@ Tile.prototype.draw = function() {
     textSize(24);
     text(num[i], this.x, this.y, this.size, this.size);//number on back of the card (-4 - 4)
     num[12] = 0; //starting center number = 0
-    };
+};
     
 for (var i = 0; i < tiles.length; i++)
 {tiles[i].draw();}
 
 var draw = function() {
-     
+    textSize(20);
+    text("Player 1 score: " + player1score, 15,42);
+    text("Player 2 score: " + player2score, 218,42);
 };
+
