@@ -1,21 +1,14 @@
-var num = [];// global variable array to store random number values (-4,4)
-
 var playerTurn = 0;
 var player1score = 0;
 var player2score = 0;
 
-for (var i = 0; i < 25; i++){
-    num.push(round(random(-4,-1)));
-    num.push(round(random(1,4)));
-}
-
-var Tile = function (x,y,face,color) { // creates tiles (constructor function)
+var Tile = function (x,y,number) { // creates tiles (constructor function)
     this.x = x;
     this.y = y;
     this.size = 56;
-    this.color = color;
-    this.face = face;
-    this.isFaceUp = false;//boolean (either true or false) 
+    this.color = color(212, 172, 27); // neutral color
+    this.number = number;
+    // this.isFaceUp = false;//boolean (either true or false) 
 };
 
 var tiles = [];// empty array for tiles
@@ -27,12 +20,6 @@ Tile.prototype.isUnderMouse = function(x, y) {
 };// geometry test to see if its under the mouse 
 
 
-mouseClicked = function(){
-    if (Tile.isUnderMouse(mouseX, mouseY))     {
-        this.isFaceUp = true;
-    }
-};
-
 var NUM_COLS = 5;// number of columns
 var NUM_ROWS = 5; // number of rows
 // global variables 
@@ -40,34 +27,66 @@ for (var i = 0; i < NUM_COLS; i++) {
     for (var j = 0; j < NUM_ROWS; j++){
         var tileX = i * 77 + 46;
         var tileY = j * 67 + 87;
-        tiles.push(new Tile (tileX, tileY));
+        
+        var value = 0;
+        // Keep picking random numbers until we get a non-zero number 
+        while (value === 0) {
+            value = round(random(-4, 4));   
+        }
+        
+        tiles.push(new Tile (tileX, tileY, value));
     }//tile positiooning 
 }
 
+// Force middle to be zero 
+tiles[12].number = 0;
+
+mouseClicked = function(){
+    for ( var i in tiles) {
+        if (tiles[i].isUnderMouse(mouseX, mouseY)) {
+            // TOOD - depending on playere, add score and change color 
+            
+            if (playerTurn === 0) {
+                tiles[i].color = color(245, 8, 59);
+                player1score+= tiles[i].number;
+                playerTurn = 1;
+                
+            }else if (playerTurn === 1){
+                
+                // TODO - bascilly oppsite of above 
+                tiles[i].color = color(45, 10, 245);
+                player2score+= tiles[i].number;
+                playerTurn = 0;
+                
+            }
+        } 
+    }
+
+};
+
     
 Tile.prototype.draw = function() {
-   if(this.isFaceUp) {
-        fill(240, 201, 201);
-    }
-    else{
-        fill(194, 194, 237);
-    }
+    fill(this.color);
+
    // fill(203, 200, 230);//card color
     strokeWeight(2);//outline of the card
     rectMode(CENTER);
     rect(this.x, this.y, this.size, this.size, 10);//size of card
     fill(13, 12, 12);
     textSize(24);
-    text(num[i], this.x, this.y, this.size, this.size);//number on back of the card (-4 - 4)
-    num[12] = 0; //starting center number = 0
+    text(this.number, this.x, this.y, this.size, this.size);//number on back of the card (-4 - 4)
+    // num[12] = 0; //starting center number = 0
 };
-    
-for (var i = 0; i < tiles.length; i++)
-{tiles[i].draw();}
 
 var draw = function() {
     textSize(20);
     text("Player 1 score: " + player1score, 15,42);
     text("Player 2 score: " + player2score, 218,42);
+    noStroke();
+    for (var i = 0; i < tiles.length; i++)
+    {
+        tiles[i].draw();
+        
+    }
 };
 
