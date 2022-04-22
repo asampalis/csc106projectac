@@ -1,12 +1,46 @@
-// new splash screen 
 var currentScene = 0;
 
-var bodyX=100;
-var bodyY=100;
-var bitmojiHeight = 50;
+var drawTheme = function(){
+    //border
+    noStroke();
+    fill(107, 70, 17);
+    rect(10,10,380,2);
+    rect(10,10,2,372);
+    rect(388,10,2,370);
+    rect(10,379,379,2);
+    
+    //hat 1
+    fill(48, 30, 2);
+    triangle(38,294,90,292,56,254);//left
+    triangle(43,292,109,293,85,253);//right
+    rect(25,291,96,3);
+    
+    //hat 2
+    fill(48, 30, 2);
+    triangle(296,298,382,298,311,255);
+    triangle(380,298,308,300,358,252);
+    rect(287,297,103,3);
+    
+    //traveling x
+    fill(255, 0, 0);
+    rect(239,216,27,5);
+    rect(186,216,27,5);
+    rect(133,216,27,5);
+    rect(76,216,27,5);
+    textSize(49);
+    text("X", 299,188);
+    
+    //kahn images
+   rotate(-20);
+    image(getImage("cute/ChestClosed"),11,39,55,55);
+   rotate(46);
+    image(getImage("cute/Key"),300,-151,70,99);
+    rotate(-26);
+    
+};
 
-var drawBitmoji2 = function(bodyX, bodyY, bodyHeight){stroke(0, 0, 0);
-    strokeWeight(1);
+var drawBody = function(bodyX,bodyY,bitmojiHeight) {
+    stroke(0, 0, 0);
     fill(248,217,189); //body
     triangle(bodyX-(bitmojiHeight/150*18),bodyY+(bitmojiHeight/150*51),bodyX+(bitmojiHeight/150*18),bodyY+(bitmojiHeight/150*51),bodyX,bodyY+(bitmojiHeight/150*66));
     line(bodyX-(bitmojiHeight/150*19),bodyY+(bitmojiHeight/150*69),bodyX-(bitmojiHeight/150*51),bodyY+(bitmojiHeight/150*33));
@@ -17,12 +51,15 @@ var drawBitmoji2 = function(bodyX, bodyY, bodyHeight){stroke(0, 0, 0);
     line(bodyX-(bitmojiHeight/150*48),bodyY+(bitmojiHeight/150*128),bodyX-(bitmojiHeight/150*65),bodyY+(bitmojiHeight/150*68));
     line(bodyX+(bitmojiHeight/150*84),bodyY+(bitmojiHeight/150*131),bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*66));
     line(bodyX+(bitmojiHeight/150*63),bodyY+(bitmojiHeight/150*131),bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*66));
-     fill(248,217,189);
+    
+    fill(248,217,189);
     ellipse(bodyX,bodyY,bitmojiHeight/150*94,bitmojiHeight/150*109); //head
+    
     fill(255, 223, 185);
     ellipse(bodyX-(bitmojiHeight/150*21),bodyY+(bitmojiHeight/150*1),bitmojiHeight/150*32,bitmojiHeight/150*34); //glasses
     ellipse(bodyX+(bitmojiHeight/150*22),bodyY+(bitmojiHeight/150*1),bitmojiHeight/150*32,bitmojiHeight/150*34);
     line(bodyX+(bitmojiHeight/150*7),bodyY-(bitmojiHeight/150*1),bodyX-(bitmojiHeight/150*7),bodyY);
+    
     ellipse(bodyX-(bitmojiHeight/150*19),bodyY-(bitmojiHeight/150*22),bitmojiHeight/150*20,bitmojiHeight/150*4); //eyebrows
     ellipse(bodyX+(bitmojiHeight/150*20),bodyY-(bitmojiHeight/150*22),bitmojiHeight/150*20,bitmojiHeight/150*4);
     fill(99, 88, 42);
@@ -33,6 +70,7 @@ var drawBitmoji2 = function(bodyX, bodyY, bodyHeight){stroke(0, 0, 0);
     fill(248,217,189);
     triangle(bodyX-(bitmojiHeight/150*6),bodyY+(bitmojiHeight/150*17),bodyX,bodyY+(bitmojiHeight/150*4),bodyX+(bitmojiHeight/150*8),bodyY+(bitmojiHeight/150*17)); //nose
     arc(bodyX+(bitmojiHeight/150*1),bodyY+(bitmojiHeight/150*26),bitmojiHeight/150*19,bitmojiHeight/150*12,6,176); //mouth
+    
      noStroke();
     fill(82, 76, 51);
     arc(bodyX-(bitmojiHeight/150*43),bodyY+(bitmojiHeight/150*107),bitmojiHeight/150*18,bitmojiHeight/150*-283,3,185); //hair
@@ -40,17 +78,22 @@ var drawBitmoji2 = function(bodyX, bodyY, bodyHeight){stroke(0, 0, 0);
     arc(bodyX,bodyY-(bitmojiHeight/150*21),bitmojiHeight/150*94,bitmojiHeight/150*-84,-17,192);
     fill(248,217,189);
     triangle(bodyX-(bitmojiHeight/150*5),bodyY-(bitmojiHeight/150*13),bodyX-(bitmojiHeight/150*7),bodyY-(bitmojiHeight/150*42),bodyX+(bitmojiHeight/150*5),bodyY-(bitmojiHeight/150*1));
-     fill(38, 62, 87);
+    
+  fill(38, 62, 87);
     arc(bodyX,bodyY-(bitmojiHeight/150*36),bitmojiHeight/150*91,bitmojiHeight/150*-67,-9,188); //hat
+    
     stroke(0, 0, 0);
     noFill(); //Initials
     arc(bodyX-(bitmojiHeight/150*6),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*29,bitmojiHeight/150*33,80,295);
     arc(bodyX+(bitmojiHeight/150*20),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*30,bitmojiHeight/150*34,63,301);
     arc(bodyX-(bitmojiHeight/150*3),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*33,bitmojiHeight/150*34,80,280);
     arc(bodyX+(bitmojiHeight/150*23),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*33,bitmojiHeight/150*34,80,280);
-};//christina
-
-
+    
+    
+};
+var drawBitmoji2 = function(bodyX,bodyY,bitmojiHeight) {
+    drawBody(bodyX,bodyY,bitmojiHeight);
+};  //christina bitmoji
 
 var drawBitmoji = function(meX, meY, meSize){
 //hair
@@ -93,9 +136,10 @@ rect(meX+170*meSize/100, meY+168*meSize/100, meSize/100*34, meSize/100*21);
 fill(12, 32, 150);
 rect(meX+134*meSize/100, meY+189*meSize/100, meSize/100*110, meSize/100*56, 20);
 fill(247, 10, 53);
+textSize(23);
 text("AS",meX+161*meSize/100, meY+204*meSize/100, meSize/100*100, meSize/100*100);
-};//alex 
-
+strokeWeight(1);
+};//alex bitmoji
 
 var Button = function(config) {
     this.x = config.x || 0;
@@ -104,10 +148,11 @@ var Button = function(config) {
     this.height = config.height || 50;
     this.label = config.label || "Click";
     this.onClick = config.onClick || function() {};
+    this.buttonColor = config.buttonColor || color(18, 235, 235);
 };//variable with capital letter = class name// this is a constructor
 
 Button.prototype.draw = function() {
-    fill(0, 234, 255);
+    fill(this.buttonColor);
     rect(this.x, this.y, this.width, this.height, 5);
     fill(0, 0, 0);
     textSize(19);
@@ -130,8 +175,9 @@ Button.prototype.handleMouseClick = function() {
 
 var instructions = new Button({
     x: 130,
-    y: 241,
+    y: 264,
     label: "   Instructions",
+    buttonColor: color(247, 255, 0),
     onClick: function() {
         currentScene = 1;
     }
@@ -139,17 +185,19 @@ var instructions = new Button({
 
 var startButton = new Button({
     x: 128,
-    y: 307,
-    label: "Play GAME!",
+    y: 321,
+    label: "   Play GAME!",
+    buttonColor: color(247, 255, 0),
     onClick: function() {
         currentScene = 2;
     }
 });
 
 var menuButton = new Button({
-    x: 128,
-    y: 307,
-    label: "Main Menu",
+    x: 14,
+    y: 14,
+    label: "   Main Menu",
+    buttonColor: color(247, 255, 0),
     onClick: function() {
         currentScene = 0;
     }
@@ -168,19 +216,54 @@ mouseClicked = function() {
 };
 
 var splash = function() {
-    background(225, 208, 237);
-    drawBitmoji(214,-32,70);
-    drawBitmoji2(61,47,107);
-    textSize(25);
-    text("Fishing for Numbers", 108, 175);
+    background(235, 231, 206);
+    drawBitmoji(207,233,70);
+    drawBitmoji2(73,315,100);
+    textSize(40);
+    stroke(8, 8, 8);
+    strokeWeight(10);
+    fill(230, 175, 37);
+    text(" Number\nTreasure \n   Hunt!", 119, 58);
+    noStroke();
     startButton.draw();
     instructions.draw();
+    
+    
+    drawTheme();
 };
 
 
 var inst = function(){
-    background(255, 0, 0);
-    text("The goal of the game is simple!\n jump from tile to tile and try to get \na higher score than your oponent.",59,149);
+     background(235, 231, 206);
+    textSize(16);
+    fill(107, 70, 17);
+    //text
+    text("               The goal of the game is simple,\n            try to dig up more valuable treasure \n                         than your opponent.\n        Player 1 gets first move, in any direction!\n            The second player then gets to jump \n          to the tile in the opposite direction from \n                  where their opponent landed\n                        The game ends when \n                  no more moves can be made\n                                Good Luck!",28,70);
+    
+    //chest
+    image(getImage("cute/ChestOpen"),160,242,94,127);
+    //rays coming out of the chest
+    fill(245, 230, 19);
+    noStroke();
+    triangle(80,255,94,255,176,330);//1
+    triangle(121,255,138,255,192,330);//2
+    triangle(181,255,167,255,205,330);//3
+    triangle(220,255,235,255,213,331);//4
+    triangle(277,255,263,255,226,331);//5
+    triangle(330,255,313,255,236,331);//6
+    
+    //images
+    image(getImage("cute/GemBlue"),23,318,55,55);
+    image(getImage("cute/Key"),327,5,57,84);
+    image(getImage("cute/Rock"),316,318,55,55);
+    
+    //border
+    noStroke();
+    fill(107, 70, 17);
+    rect(10,10,380,2);
+    rect(10,10,2,372);
+    rect(388,10,2,370);
+    rect(10,379,379,2);
     menuButton.draw();
 };
 
