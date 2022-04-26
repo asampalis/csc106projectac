@@ -38,35 +38,35 @@ for (var i = 0; i < NUM_COLS; i++) {
     }
 }
 
-// Force middle to be zero 
-tiles[12].number = 0;
+// Force middle to be blank (starting point)
+tiles[12].number = " ";
+tiles[12].color = color(74, 163, 15);
 
 mouseClicked = function(){
     for (var i in tiles) {
         if (tiles[i].isUnderMouse(mouseX, mouseY)) {
-            // TOOD - depending on playere, add score and change color 
-            
+            // TOOD - depending on player, add score and change color 
             if (playerTurn === 0) {
                 tiles[i].color = color(245, 8, 59);
                 player1score+= tiles[i].number;
+                tiles[i].number = " ";  
                 playerTurn = 1;
                 
             } else if (playerTurn === 1){
-                
-                // TODO - bascilly oppsite of above 
                 tiles[i].color = color(45, 10, 245);
                 player2score+= tiles[i].number;
+                tiles[i].number = " ";
                 playerTurn = 0;
             }
         } 
     }
 };
-    
+ 
 Tile.prototype.draw = function() { //tile + number text description
     fill(this.color);
     //strokeWeight(2); //outline of the card
     rectMode(CENTER);
-    rect(this.x, this.y, this.size, this.size, 10);//size of card
+    rect(this.x, this.y, this.size, this.size, 10); //size of card
     fill(13, 12, 12);
     textSize(24);
     text(this.number, this.x, this.y, this.size, this.size);//number on back of the card (-4 - 4)
