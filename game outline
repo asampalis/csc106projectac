@@ -1,16 +1,15 @@
 var playerTurn = 0; //0 = Player 1, 1 = Player 2
-var player1score = 0;
+var player1score = 0; 
 var player2score = 0;
-var lastMove = 0; // 1 = vertical 0 = horizantal
-var lastBox = 0; 
+//var lastMove = 0; // 1 = vertical 0 = horizantal
+//var lastBox = 0; 
 
 var Tile = function (x, y, number) { // creates tiles (constructor function)
     this.x = x;
     this.y = y;
-    this.size = 56;
+    this.size = 56;//tile size
     this.color = color(212, 172, 27); // neutral color
-    this.number = number;
-    // this.isFaceUp = false;//boolean (either true or false) 
+    this.number = number; //asigns a number value to the tiles
 };
 
 var tiles = []; // empty array for tiles
@@ -20,48 +19,48 @@ Tile.prototype.isUnderMouse = function(x, y) {
     return x >= this.x && x <= this.x + this.size  && y >= this.y && y <= this.y + this.size;
 }; // geometry test to see if its under the mouse 
 
-// global variables 
-var NUM_COLS = 5;// number of columns
-var NUM_ROWS = 5; // number of rows
+// global variable 
+var NUM_ROWS = 5; // number of rows (also used for colums)
 
-for (var i = 0; i < NUM_COLS; i++) {
-    for (var j = 0; j < NUM_ROWS; j++){
+for (var i = 0; i < NUM_ROWS*NUM_ROWS; i++) {
         //tile positioning 
-        var tileX = i * 77 + 19;
-        var tileY = j * 67 + 67;
+        var tileY = i % NUM_ROWS * 68 + 64;
+        var tileX = floor(i / NUM_ROWS) * 76 + 19;
         
-        var value = 0;
+        textSize(10);
+        text(i + " x:" + i % NUM_ROWS + " y:" + floor(i / NUM_ROWS), tileX, tileY);//the x and y value assigned to the tile
+        
         // Keep picking random numbers until we get a non-zero number 
+        //pushes numbers -4 -> 4 (excluidng zero) into the arrays 
+        var value = 0;
         while (value === 0) {
             value = round(random(-4, 4));   
-        }
+             }
         
-        tiles.push(new Tile (tileX, tileY, value));
-    }
+        tiles.push(new Tile (tileX, tileY, value));//pushes each tile
 }
 
 // Force middle to be blank (starting point)
 tiles[12].number = " ";
 tiles[12].color = color(74, 163, 15);
 
+//allows for tiles to be clicked, first click will be player 1 (red) second is player 2 (blue)
 mouseClicked = function(){
     for (var i in tiles) {
         if (tiles[i].isUnderMouse(mouseX, mouseY)) {
             // TOOD - depending on player, add score and change color 
             if (tiles[i].color === color(212, 172, 27))
             {
-                lastMove = (lastMove+1)%2;
-                lastBox = i;
+                //lastMove = (lastMove+1)%2;
+                //lastBox = i;
             if (playerTurn === 0) {
-                tiles[i].color = color(245, 8, 59);
+                tiles[i].color = color(245, 8, 59);//red (player1)
                 player1score+= tiles[i].number;
-                //tiles[i].number = " ";  
                 playerTurn = 1;
                 
             } else if (playerTurn === 1){
-                tiles[i].color = color(45, 10, 245);
+                tiles[i].color = color(45, 10, 245);//blue (player 2)
                 player2score+= tiles[i].number;
-                //tiles[i].number = " ";
                 playerTurn = 0;
             }
             }
@@ -69,21 +68,22 @@ mouseClicked = function(){
     }
 };
  
+//draw function that draws tiles
 Tile.prototype.draw = function() { //tile + number text description
     fill(this.color);
     //strokeWeight(2); //outline of the card
     rect(this.x, this.y, this.size, this.size, 10); //size of card
     fill(3, 0, 0);
     textSize(24);
-    text(this.number, this.x+15, this.y+12, this.size, this.size);//number on back of the card (-4 - 4)
-    // num[12] = 0; //starting center number = 0
+    text(this.number, this.x+15, this.y+12, this.size, this.size);//number on the card (-4 - 4)(positioning of the numbers)
 };
 
+//draw function that adds player score and calls the tilesdraw function
 draw = function() {
     noStroke();
     //rect to blank out previous score
     fill(255, 255, 255);
-    rect(12, 28, 776, 37);
+    rect(8, 13, 776, 37);
     
     //text for Player Scores
     textSize(20);
@@ -93,7 +93,7 @@ draw = function() {
     text("Player 2 Score: " + player2score, 225, 42);
     
     //to call draw tiles
-    for (var i = 0; i < tiles.length; i++)
+   for (var i = 0; i < tiles.length; i++)
     {
         tiles[i].draw();
     }
