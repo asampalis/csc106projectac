@@ -1,1 +1,105 @@
+var xPositions = [200];
+var yPositions = [0];
+var colors = [];
+var speed = [];
 
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+    this.buttonColor = config.buttonColor || color(18, 235, 235);
+};//variable with capital letter = class name// this is a constructor
+
+Button.prototype.draw = function() {
+    fill(this.buttonColor);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var playAgain = new Button({
+    x: 127,
+    y: 216,
+    label: "   Play Again",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        //currentScene = 2;
+    }
+});
+
+var mainMenu = new Button({
+    x: 128,
+    y: 289,
+    label: "   Main Menu",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        //currentScene = 2;
+    }
+});
+
+for (var i = 0; i < 100; i++)
+{
+    xPositions.push(random(1,493));
+    yPositions.push(random(1,192));
+    colors.push(color(random(0,255),random(0,255),random(0,255)));
+    speed.push(random(1,5));
+}
+
+draw = function() {
+    background(235, 231, 206);
+
+    noStroke();
+    fill(0, 200, 255);
+
+    for (var i = 0; i < xPositions.length; i++) {
+        fill(colors[i]);
+        image(getImage("cute/GemOrange"),xPositions[i], yPositions[i], 24, 31);
+        yPositions[i] += speed[i];
+ 
+        if(yPositions[i] > 400){
+        yPositions[i] = 0;
+    }
+    
+    //border
+    noStroke();
+    fill(107, 70, 17);
+    rect(10,10,380,2);
+    rect(10,10,2,372);
+    rect(388,10,2,370);
+    rect(10,379,379,2);
+    
+    //player wins "scroll"
+    fill(255, 255, 255);
+    stroke(107, 70, 17);
+    rect(19,137,51,48);//left
+    rect(329,137,51,48);//right
+    rect(52,117,301,48);//middle
+    triangle(52,165,52,165,70,185);//left
+    triangle(353,165,353,165,329,185);//right
+    
+    fill(230, 175, 37);
+    textSize(41);
+    text("Player _ Wins!!!", 58,114);
+    
+    playAgain.draw();
+    mainMenu.draw();
+    }
+};
