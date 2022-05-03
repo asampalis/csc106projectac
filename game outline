@@ -78,6 +78,20 @@ Tile.prototype.draw = function() { //tile + number text description
     text(this.number, this.x+15, this.y+12, this.size, this.size);//number on the card (-4 - 4)(positioning of the numbers)
 };
 
+var constraint = function()
+{
+    /*
+    if player 1...
+    If player turn = 0 and last move = 0 First click is in y2 column 
+
+    if player 2...
+    //player 1 moves up
+    If player turn = 1 and last move = 11 click must be in row x1
+    //player 1 moves down
+	If player turn = 1 and last move = 13 click must be in row x3
+    */
+};
+
 //draw function that adds player score and calls the tilesdraw function
 draw = function() {
     noStroke();
