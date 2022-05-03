@@ -37,8 +37,15 @@ var drawTheme = function(){
     image(getImage("cute/Key"),300,-151,70,99);
     rotate(-26);
     
-};
+};// draws "theme" elemetns on main menue
 
+//global variables for the falling gems on the win game screen 
+var xPositions = [200];
+var yPositions = [0];
+var colors = [];
+var speed = [];
+
+//christina bitmoji
 var drawBody = function(bodyX,bodyY,bitmojiHeight) {
     stroke(0, 0, 0);
     fill(248,217,189); //body
@@ -93,8 +100,9 @@ var drawBody = function(bodyX,bodyY,bitmojiHeight) {
 };
 var drawBitmoji2 = function(bodyX,bodyY,bitmojiHeight) {
     drawBody(bodyX,bodyY,bitmojiHeight);
-};  //christina bitmoji
+}; 
 
+//alex bitmoji
 var drawBitmoji = function(meX, meY, meSize){
 //hair
 fill(82, 57, 8);
@@ -139,8 +147,9 @@ fill(247, 10, 53);
 textSize(23);
 text("AS",meX+161*meSize/100, meY+204*meSize/100, meSize/100*100, meSize/100*100);
 strokeWeight(1);
-};//alex bitmoji
+};
 
+//kahn button class
 var Button = function(config) {
     this.x = config.x || 0;
     this.y = config.y || 0;
@@ -150,7 +159,6 @@ var Button = function(config) {
     this.onClick = config.onClick || function() {};
     this.buttonColor = config.buttonColor || color(18, 235, 235);
 };//variable with capital letter = class name// this is a constructor
-
 Button.prototype.draw = function() {
     fill(this.buttonColor);
     rect(this.x, this.y, this.width, this.height, 5);
@@ -159,62 +167,92 @@ Button.prototype.draw = function() {
     textAlign(LEFT, TOP);
     text(this.label, this.x+10, this.y+this.height/4);
 };
-
 Button.prototype.isMouseInside = function() {
     return mouseX > this.x &&
            mouseX < (this.x + this.width) &&
            mouseY > this.y &&
            mouseY < (this.y + this.height);
 };
-
 Button.prototype.handleMouseClick = function() {
     if (this.isMouseInside()) {
         this.onClick();
     }
 };
 
+//new button takes you to instruction screen (when clicked current scene 1)
 var instructions = new Button({
     x: 130,
     y: 264,
     label: "   Instructions",
-    buttonColor: color(247, 255, 0),
+    buttonColor: color(230, 175, 37),
     onClick: function() {
         currentScene = 1;
     }
 });
 
+//new button takes you to the game screen (when clicked current scene = 2)
 var startButton = new Button({
     x: 128,
     y: 321,
     label: "   Play GAME!",
-    buttonColor: color(247, 255, 0),
+    buttonColor: color(230, 175, 37),
     onClick: function() {
         currentScene = 2;
     }
 });
 
+//new button takes you to the main menue screen (when clicked current scene 0) (found on instructions screen)
 var menuButton = new Button({
     x: 14,
     y: 14,
     label: "   Main Menu",
-    buttonColor: color(247, 255, 0),
+    buttonColor: color(230, 175, 37),
     onClick: function() {
         currentScene = 0;
     }
 });
 
-mouseClicked = function() {
-    if (currentScene === 0)
-    {
-    instructions.handleMouseClick();
-    startButton.handleMouseClick();
+//play again button found on the win screen allows you to replay the game (when clicked current scene = 2 (game screen))
+var playAgain = new Button({
+    x: 128,
+    y: 321,
+    label: "   Play Again",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        currentScene = 2;
     }
-    if (currentScene === 1)
+});
+
+//new button takes you to the main menue screen (when clicked current scene 0) (found on win screen)
+var mainMenu = new Button({
+    x: 128,
+    y: 289,
+    label: "   Main Menu",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        currentScene = 0;
+    }
+});
+
+//allows for buttons to take you to different screens when clicked
+mouseClicked = function() {
+    if (currentScene === 0)//buttons found on the main menu screen
+    {
+        instructions.handleMouseClick();
+        startButton.handleMouseClick();
+    }
+    if (currentScene === 1)//buttons found on the instructions screen
     {
         menuButton.handleMouseClick();
     }
+    if (currentScene === 3)//buttons found on the win screen scene
+    {
+        mainMenu.handleMouseClick();
+        playAgain.handleMouseClick();
+    }
 };
 
+//draws the main menu screen (aka splash screen)
 var splash = function() {
     background(235, 231, 206);
     drawBitmoji(207,233,70);
@@ -224,17 +262,17 @@ var splash = function() {
     strokeWeight(10);
     fill(230, 175, 37);
     text(" Number\nTreasure \n   Hunt!", 119, 58);
-    noStroke();
+    stroke(107, 70, 17);
+    strokeWeight(2);
     startButton.draw();
     instructions.draw();
-    
     
     drawTheme();
 };
 
-
+//draws the instruction screen including "main menu" button, open chest, instructions, border, and other kahn images
 var inst = function(){
-     background(235, 231, 206);
+    background(235, 231, 206);
     textSize(16);
     fill(107, 70, 17);
     //text
@@ -264,12 +302,67 @@ var inst = function(){
     rect(10,10,2,372);
     rect(388,10,2,370);
     rect(10,379,379,2);
+    stroke(107, 70, 17);
+    strokeWeight(2);
     menuButton.draw();
 };
 
+//draws win screen 
+var winScreen = function()
+{
+    for (var i = 0; i < 100; i++)
+{
+    xPositions.push(random(1,493));
+    yPositions.push(random(1,192));
+    colors.push(color(random(0,255),random(0,255),random(0,255)));
+    speed.push(random(1,5));
+}
+    background(235, 231, 206);
 
+    noStroke();
+    fill(0, 200, 255);
 
+    for (var i = 0; i < xPositions.length; i++) {
+        fill(colors[i]);
+        image(getImage("cute/GemOrange"),xPositions[i], yPositions[i], 24, 31);
+        yPositions[i] += speed[i];
+ 
+        if(yPositions[i] > 400){
+        yPositions[i] = 0;
+    }
+    
+    //border
+    noStroke();
+    fill(107, 70, 17);
+    rect(10,10,380,2);
+    rect(10,10,2,372);
+    rect(388,10,2,370);
+    rect(10,379,379,2);
+    
+    //player wins "scroll"
+    fill(255, 255, 255);
+    stroke(107, 70, 17);
+    rect(19,137,51,48);//left
+    rect(329,137,51,48);//right
+    rect(52,117,301,48);//middle
+    triangle(52,165,52,165,70,185);//left
+    triangle(353,165,353,165,329,185);//right
+    
+    fill(230, 175, 37);
+    textSize(41);
+    text("Player _ Wins!!!", 58,114);
+    
+    playAgain.draw();
+    mainMenu.draw();
+    }
+};
 
+var gameScreen = function()
+{
+    background(255, 0, 0);
+};
+
+//draws all aspects of the game
 draw = function() {
     if (currentScene === 0)
     {
@@ -278,8 +371,11 @@ draw = function() {
     else if (currentScene === 1) {
         inst();
     }
-    else {
-        background(18, 18, 186);
+    else if (currentScene === 2){
+        gameScreen();
+    }
+    else if(currentScene === 3){
+        winScreen();
     }
 };
 
