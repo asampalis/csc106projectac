@@ -1,0 +1,509 @@
+//global variables
+var currentScene = 0; //0 = splash, 1 = instructions, 2 = game, 3 = win screen
+var stopFunction = true; //ensures gameplay does not begin until the user clicks "Play Game!" and does not change tile color under the play button when they do
+
+var playerTurn = 0; //0 = Player 1, 1 = Player 2
+var player1score = 0; 
+var player2score = 0;
+
+var lastDirection = 1; // 0 = vertical, 1 = horizontal
+
+//global variables for the falling gems on the win game screen 
+var xPositions = [100];
+var yPositions = [0];
+var colors = [];
+var speed = [];
+//------------------------------------------------------------------------------------------
+//christina bitmoji
+var drawBody = function(bodyX,bodyY,bitmojiHeight) {
+    stroke(0, 0, 0);
+    fill(248,217,189); //body
+    triangle(bodyX-(bitmojiHeight/150*18),bodyY+(bitmojiHeight/150*51),bodyX+(bitmojiHeight/150*18),bodyY+(bitmojiHeight/150*51),bodyX,bodyY+(bitmojiHeight/150*66));
+    line(bodyX-(bitmojiHeight/150*19),bodyY+(bitmojiHeight/150*69),bodyX-(bitmojiHeight/150*51),bodyY+(bitmojiHeight/150*33));
+    line(bodyX+(bitmojiHeight/150*19),bodyY+(bitmojiHeight/150*69),bodyX+(bitmojiHeight/150*49),bodyY+(bitmojiHeight/150*32));
+    line(bodyX-(bitmojiHeight/150*66),bodyY+(bitmojiHeight/150*65),bodyX-(bitmojiHeight/150*34),bodyY+(bitmojiHeight/150*34));
+    line(bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*65),bodyX+(bitmojiHeight/150*27),bodyY+(bitmojiHeight/150*28));
+    line(bodyX-(bitmojiHeight/150*72),bodyY+(bitmojiHeight/150*128),bodyX-(bitmojiHeight/150*65),bodyY+(bitmojiHeight/150*64));
+    line(bodyX-(bitmojiHeight/150*48),bodyY+(bitmojiHeight/150*128),bodyX-(bitmojiHeight/150*65),bodyY+(bitmojiHeight/150*68));
+    line(bodyX+(bitmojiHeight/150*84),bodyY+(bitmojiHeight/150*131),bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*66));
+    line(bodyX+(bitmojiHeight/150*63),bodyY+(bitmojiHeight/150*131),bodyX+(bitmojiHeight/150*70),bodyY+(bitmojiHeight/150*66));
+    
+    fill(248,217,189);
+    ellipse(bodyX,bodyY,bitmojiHeight/150*94,bitmojiHeight/150*109); //head
+    
+    fill(255, 223, 185);
+    ellipse(bodyX-(bitmojiHeight/150*21),bodyY+(bitmojiHeight/150*1),bitmojiHeight/150*32,bitmojiHeight/150*34); //glasses
+    ellipse(bodyX+(bitmojiHeight/150*22),bodyY+(bitmojiHeight/150*1),bitmojiHeight/150*32,bitmojiHeight/150*34);
+    line(bodyX+(bitmojiHeight/150*7),bodyY-(bitmojiHeight/150*1),bodyX-(bitmojiHeight/150*7),bodyY);
+    
+    ellipse(bodyX-(bitmojiHeight/150*19),bodyY-(bitmojiHeight/150*22),bitmojiHeight/150*20,bitmojiHeight/150*4); //eyebrows
+    ellipse(bodyX+(bitmojiHeight/150*20),bodyY-(bitmojiHeight/150*22),bitmojiHeight/150*20,bitmojiHeight/150*4);
+    fill(99, 88, 42);
+    ellipse(bodyX-(bitmojiHeight/150*19),bodyY-(bitmojiHeight/150*5),bitmojiHeight/150*15,bitmojiHeight/150*8); //eyes
+    ellipse(bodyX+(bitmojiHeight/150*20),bodyY-(bitmojiHeight/150*5),bitmojiHeight/150*15,bitmojiHeight/150*8);
+    line(bodyX-(bitmojiHeight/150*27),bodyY-(bitmojiHeight/150*5),bodyX-(bitmojiHeight/150*32),bodyY-(bitmojiHeight/150*3)); //eyelashes
+    line(bodyX+(bitmojiHeight/150*28),bodyY-(bitmojiHeight/150*5),bodyX+(bitmojiHeight/150*33),bodyY-(bitmojiHeight/150*3));
+    fill(248,217,189);
+    triangle(bodyX-(bitmojiHeight/150*6),bodyY+(bitmojiHeight/150*17),bodyX,bodyY+(bitmojiHeight/150*4),bodyX+(bitmojiHeight/150*8),bodyY+(bitmojiHeight/150*17)); //nose
+    arc(bodyX+(bitmojiHeight/150*1),bodyY+(bitmojiHeight/150*26),bitmojiHeight/150*19,bitmojiHeight/150*12,6,176); //mouth
+    
+     noStroke();
+    fill(82, 76, 51);
+    arc(bodyX-(bitmojiHeight/150*43),bodyY+(bitmojiHeight/150*107),bitmojiHeight/150*18,bitmojiHeight/150*-283,3,185); //hair
+    arc(bodyX+(bitmojiHeight/150*44),bodyY+(bitmojiHeight/150*107),bitmojiHeight/150*18,bitmojiHeight/150*-283,-3,174);
+    arc(bodyX,bodyY-(bitmojiHeight/150*21),bitmojiHeight/150*94,bitmojiHeight/150*-84,-17,192);
+    fill(248,217,189);
+    triangle(bodyX-(bitmojiHeight/150*5),bodyY-(bitmojiHeight/150*13),bodyX-(bitmojiHeight/150*7),bodyY-(bitmojiHeight/150*42),bodyX+(bitmojiHeight/150*5),bodyY-(bitmojiHeight/150*1));
+    
+  fill(38, 62, 87);
+    arc(bodyX,bodyY-(bitmojiHeight/150*36),bitmojiHeight/150*91,bitmojiHeight/150*-67,-9,188); //hat
+    
+    stroke(0, 0, 0);
+    noFill(); //Initials
+    arc(bodyX-(bitmojiHeight/150*6),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*29,bitmojiHeight/150*33,80,295);
+    arc(bodyX+(bitmojiHeight/150*20),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*30,bitmojiHeight/150*34,63,301);
+    arc(bodyX-(bitmojiHeight/150*3),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*33,bitmojiHeight/150*34,80,280);
+    arc(bodyX+(bitmojiHeight/150*23),bodyY+(bitmojiHeight/150*101),bitmojiHeight/150*33,bitmojiHeight/150*34,80,280);
+    
+    
+};
+var drawBitmoji2 = function(bodyX,bodyY,bitmojiHeight) {
+    drawBody(bodyX,bodyY,bitmojiHeight);
+}; 
+
+//alex bitmoji
+var drawBitmoji = function(meX, meY, meSize){
+//hair
+fill(82, 57, 8);
+rect((meX+129*meSize/100), (meY+103*meSize/100), meSize/100*117, meSize/100*107, 10);
+noStroke();
+ellipse(meX+188*meSize/100, meY+106*meSize/100, meSize/100*118, meSize/100*100);
+//head
+noStroke();
+fill (232, 200, 135);
+ellipse (meX+188*meSize/100, meY+125*meSize/100, meSize/100*92, meSize/100*100);
+//eyes
+fill(252, 247, 252);
+ellipse(meX+163*meSize/100, meY+120*meSize/100, meSize/100*15, meSize/100*10);
+ellipse(meX+210*meSize/100, meY+120*meSize/100, meSize/100*15, meSize/100*10);
+fill(140, 94, 8);
+ellipse(meX+163*meSize/100, meY+120*meSize/100, meSize/100*9, meSize/100*9);
+ellipse(meX+210*meSize/100, meY+120*meSize/100, meSize/100*9, meSize/100*9);
+fill(8, 8, 8);
+ellipse(meX+210*meSize/100, meY+120*meSize/100, meSize/100*5, meSize/100*5);
+ellipse(meX+163*meSize/100, meY+120*meSize/100, meSize/100*5, meSize/100*5);
+//eyebrows
+fill(82, 57, 8);
+rect(meX+154*meSize/100, meY+106*meSize/100, meSize/100*17, meSize/100*3, 10);
+rect(meX+202*meSize/100, meY+106*meSize/100, meSize/100*17, meSize/100*3, 10);
+//nose
+fill(217, 186, 123);
+rect(meX+183*meSize/100, meY+121*meSize/100, meSize/100*10, meSize/100*16, 10);
+ellipse(meX+188*meSize/100, meY+135*meSize/100, meSize/100*15, meSize/100*10);
+//mouth
+strokeWeight(10);
+fill(255, 0, 0);
+arc(meX+183*meSize/100, meY+157*meSize/100, meSize/100*41, meSize/100*153, -5, -4);
+rect(meX+172*meSize/100, meY+155*meSize/100, meSize/100*18, meSize/100*1);
+
+//neck
+fill(232, 200, 135);
+rect(meX+170*meSize/100, meY+168*meSize/100, meSize/100*34, meSize/100*21);
+//shirt
+fill(12, 32, 150);
+rect(meX+134*meSize/100, meY+189*meSize/100, meSize/100*110, meSize/100*56, 20);
+fill(247, 10, 53);
+textSize(23);
+text("AS",meX+161*meSize/100, meY+204*meSize/100, meSize/100*100, meSize/100*100);
+strokeWeight(1);
+};
+//------------------------------------------------------------------------------------------
+var drawTheme = function(){
+    //border
+    noStroke();
+    fill(107, 70, 17);
+    rect(10,10,380,2);
+    rect(10,10,2,372);
+    rect(388,10,2,370);
+    rect(10,379,379,2);
+    
+    //hat 1
+    fill(48, 30, 2);
+    triangle(38,294,90,292,56,254);//left
+    triangle(43,292,109,293,85,253);//right
+    rect(25,291,96,3);
+    
+    //hat 2
+    fill(48, 30, 2);
+    triangle(296,298,382,298,311,255);
+    triangle(380,298,308,300,358,252);
+    rect(287,297,103,3);
+    
+    //traveling x
+    fill(255, 0, 0);
+    rect(239,216,27,5);
+    rect(186,216,27,5);
+    rect(133,216,27,5);
+    rect(76,216,27,5);
+    textSize(49);
+    text("X", 299,188);
+    
+    //kahn images
+   rotate(-20);
+    image(getImage("cute/ChestClosed"),11,39,55,55);
+   rotate(46);
+    image(getImage("cute/Key"),300,-151,70,99);
+    rotate(-26);
+    
+}; // draws "theme" elements on main menu
+
+//khan button class
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+    this.buttonColor = config.buttonColor || color(18, 235, 235);
+}; //variable with capital letter = class name 
+// this is a constructor
+Button.prototype.draw = function() {
+    fill(this.buttonColor);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+//new button takes you to instruction screen (when clicked current scene 1)
+var instructions = new Button({
+    x: 130,
+    y: 264,
+    label: "   Instructions",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        currentScene = 1;
+    }
+});
+
+//new button takes you to the game screen (when clicked current scene = 2)
+var startButton = new Button({
+    x: 128,
+    y: 321,
+    label: "   Play GAME!",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        currentScene = 2;
+    }
+});
+
+//new button takes you to the main menu screen (when clicked current scene 0) (found on instructions screen)
+var menuButton = new Button({
+    x: 14,
+    y: 14,
+    label: "   Main Menu",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        currentScene = 0;
+    }
+});
+
+//new button takes you to the main menue screen (when clicked current scene 0) (found on win screen)
+var mainMenu = new Button({
+    x: 128,
+    y: 260,
+    label: "   Main Menu",
+    buttonColor: color(230, 175, 37),
+    onClick: function() {
+        currentScene = 0;
+    }
+});
+
+//draws the main menu screen (aka splash screen)
+var splash = function() {
+    background(235, 231, 206);
+    drawBitmoji(207,233,70);//alex bitmoji
+    drawBitmoji2(74,315,100);//christina bitmoji
+    textSize(40);
+    stroke(8, 8, 8);
+    strokeWeight(10);
+    fill(230, 175, 37);
+    text(" Number\nTreasure \n   Hunt!", 119, 58); // title
+    stroke(107, 70, 17);
+    strokeWeight(2);
+    startButton.draw(); //play game button
+    instructions.draw(); //takes you to instructions page
+    
+    drawTheme();
+};
+
+//draws the instruction screen including "main menu" button, open chest, instructions, border, and other kahn images
+var inst = function(){
+    background(235, 231, 206);
+    textSize(16);
+    fill(107, 70, 17);
+    //text
+    text("               The goal of the game is simple,\n            try to dig up more valuable treasure \n                         than your opponent.\n     Player 1 gets first move off the middle tile,\n                     either up or down!\nThe second player then gets to move side to side \n  within the row of your oponents last move \n                       The game ends when \n                  no more moves can be made\n                                Good Luck!",28,70);
+    
+    //chest
+    image(getImage("cute/ChestOpen"),160,242,94,127);
+    //rays coming out of the chest
+    fill(245, 230, 19);
+    noStroke();
+    triangle(80,255,94,255,176,330);//1
+    triangle(121,255,138,255,192,330);//2
+    triangle(181,255,167,255,205,330);//3
+    triangle(220,255,235,255,213,331);//4
+    triangle(277,255,263,255,226,331);//5
+    triangle(330,255,313,255,236,331);//6
+    
+    //images
+    image(getImage("cute/GemBlue"),23,318,55,55);
+    image(getImage("cute/Key"),327,5,57,84);
+    image(getImage("cute/Rock"),316,318,55,55);
+    
+    //border
+    noStroke();
+    fill(107, 70, 17);
+    rect(10,10,380,2);
+    rect(10,10,2,372);
+    rect(388,10,2,370);
+    rect(10,379,379,2);
+    stroke(107, 70, 17);
+    strokeWeight(2);
+    menuButton.draw();
+};
+
+//draws win screen 
+var winScreen = function() {
+    for (var i = 0; i < 100; i++) {
+        xPositions.push(random(1,493));
+        yPositions.push(random(1,192));
+        colors.push(color(random(0,255),random(0,255),random(0,255)));
+        speed.push(round(random(1,5)));
+    }
+    
+    background(235, 231, 206);
+
+    noStroke();
+    fill(0, 200, 255);
+
+    for (var q = 0; q < xPositions.length; q++) {
+        fill(colors[q]);
+        image(getImage("cute/GemOrange"), xPositions[q], yPositions[q], 24, 31);
+        yPositions[q] += speed[q];
+        
+        if (yPositions[q] > 400) {
+            yPositions[q] = -6;
+        }
+    }
+    //border
+    noStroke();
+    fill(107, 70, 17);
+    rect(10,10,380,2);
+    rect(10,10,2,372);
+    rect(388,10,2,370);
+    rect(10,379,379,2);
+    
+    //player wins "scroll"
+    fill(255, 255, 255);
+    stroke(107, 70, 17);
+    rect(19,137,51,48);//left
+    rect(329,137,51,48);//right
+    rect(52,117,301,48);//middle
+    triangle(52,165,52,165,70,185);//left
+    triangle(353,165,353,165,329,185);//right
+    
+    fill(230, 175, 37);
+    textSize(41);
+    
+    if (player1score > player2score) {
+        text("Player 1 Wins!!!", 58, 114);
+    }
+    else if (player1score < player2score) {
+        text("Player 2 Wins!!!", 58, 114);
+    }
+    else {
+        text("No one Wins!!!", 58, 114);
+    }
+    
+    //playAgain.draw();
+    mainMenu.draw();
+};
+
+var gameScreen = function()
+{
+    background(255, 255, 255);
+};
+
+var Tile = function (x, y, number) { // creates tiles (constructor function)
+    this.x = x;
+    this.y = y;
+    this.size = 56; //tile size
+    this.color = color(212, 172, 27); // neutral color
+    this.number = number; //asigns a number value to the tiles
+};
+
+var tiles = []; // empty array for tiles
+
+//is under mouse function = gives paramaters to the tiles so you can click them
+Tile.prototype.isUnderMouse = function(x, y) {
+    return x >= this.x && x <= this.x + this.size  && y >= this.y && y <= this.y + this.size;
+}; // geometry test to see if its under the mouse 
+
+// global variable 
+var NUM_ROWS = 5; // number of rows (also used for colums)
+
+for (var i = 0; i < NUM_ROWS*NUM_ROWS; i++) {
+        //tile positioning 
+        var tileY = i % NUM_ROWS * 68 + 64;
+        var tileX = floor(i / NUM_ROWS) * 76 + 19;
+        
+        textSize(10);
+        //the x and y value assigned to the tile
+        // println(i + " x:" + i % NUM_ROWS + " y:" + floor(i / NUM_ROWS));
+        
+        // Keep picking random numbers until we get a non-zero number 
+        //pushes numbers -4 -> 4 (excluidng zero) into the arrays 
+        var value = 0;
+        while (value === 0) {
+            value = round(random(-4, 4));   
+        }
+        
+        tiles.push(new Tile (tileX, tileY, value)); //pushes each tile
+}
+
+// Force middle to be blank (starting point)
+tiles[12].number = " ";
+tiles[12].color = color(74, 163, 15);
+
+//global variable that keeps track of last move
+var lastMove = tiles[12];
+var x = tileX;
+var y = tileY;
+ 
+//draw function that draws tiles
+Tile.prototype.draw = function() { //tile + number text description
+    fill(this.color);
+    //strokeWeight(2); //outline of the card
+    rect(this.x, this.y, this.size, this.size, 10); //size of card
+    fill(3, 0, 0);
+    textSize(24);
+    text(this.number, this.x+15, this.y+12, this.size, this.size);//number on the card (-4 - 4)(positioning of the numbers)
+};
+
+mouseClicked = function(){
+    //allows for buttons to take you to different screens when clicked
+    if (currentScene === 0)//buttons found on the main menu screen
+    {
+        instructions.handleMouseClick();
+        startButton.handleMouseClick();
+    }
+    if (currentScene === 1)//buttons found on the instructions screen
+    {
+        menuButton.handleMouseClick();
+    }
+    if (currentScene === 3)//buttons found on the win screen scene
+    {
+        mainMenu.handleMouseClick();
+        //playAgain.handleMouseClick();
+    }
+    
+    if (stopFunction === false) { //condition for gameplay mechanics (clicking) enabled
+        for (var i in tiles) {
+            if (tiles[i].isUnderMouse(mouseX, mouseY)) {
+            // Determine the direction that this move went in
+            // Look at tiles[i].x and tiles[i].y 
+                // if tiles[i].y is not equal to lastMove.y 
+                /*if (tiles[i].y !== lastMove.y) { //horizontal 
+                    lastDirection = 0; // Then moved vert (0)
+                    // if lastDirection is also 0, return and/or display "Not valid
+                    if (lastDirection === 0) {
+                        return;
+                    }
+                    else {lastDirection = 1;} // else flip (assign variable) lastDirection to 1// else moved hori (1)
+                // if lastDirection is also 1, return and/or display "Not valid move"
+                if (lastDirection === 1) {
+                    return;   
+                }
+                else// else flip lastDirection 0
+                    {
+                        lastDirection = 0;
+                    }
+                }
+                */    
+            //Depending on player, add score and change color    
+            if (tiles[i].color === color(212, 172, 27)) {
+                if (playerTurn === 0) {
+                    tiles[i].color = color(245, 8, 59); //red (player1)
+                    player1score+= tiles[i].number; //increases/decreases score by tile #
+                    lastMove = tiles[i];
+                    playerTurn = 1; //ends turn for player 1
+                } 
+                
+                else if (playerTurn === 1) {
+                    tiles[i].color = color(45, 10, 245); //blue (player 2)
+                    player2score+= tiles[i].number; //increases/decreases score by tile #
+                    lastMove = tiles[i];
+                    playerTurn = 0; //ends turn for player 2
+                    }
+                }
+            }
+        }
+    }
+};
+//checks that all tiles have been clicked and takes you to win screen
+var checkWin = function() {
+    if (tiles[12].color === color (74, 163, 15) && tiles[0].color !== color(212, 172, 27) && tiles[0].color !== color(212, 172, 27) && tiles[1].color !== color(212, 172, 27) && tiles[2].color !== color(212, 172, 27) && tiles[3].color !== color(212, 172, 27) && tiles[4].color !== color(212, 172, 27) && tiles[5].color !== color(212, 172, 27) && tiles[6].color !== color(212, 172, 27) && tiles[7].color !== color(212, 172, 27) && tiles[8].color !== color(212, 172, 27) && tiles[9].color !== color(212, 172, 27) && tiles[10].color !== color(212, 172, 27) && tiles[11].color !== color(212, 172, 27) && tiles[13].color !== color(212, 172, 27) && tiles[14].color !== color(212, 172, 27) && tiles[15].color !== color(212, 172, 27) && tiles[16].color !== color(212, 172, 27) && tiles[17].color !== color(212, 172, 27) && tiles[18].color !== color(212, 172, 27) && tiles[19].color !== color(212, 172, 27) && tiles[20].color !== color(212, 172, 27) && tiles[21].color !== color(212, 172, 27) && tiles[22].color !== color(212, 172, 27) && tiles[23].color !== color(212, 172, 27) && tiles[24].color !== color(212, 172, 27)) {
+        currentScene = 3;
+    }
+};
+
+//draw function that adds player score and calls the tilesdraw function
+//draws all aspects of the game
+draw = function() {
+    if (currentScene === 0) {
+        splash();
+    }
+    else if (currentScene === 1) {
+        inst();
+    }
+    else if (currentScene === 2) {
+        stopFunction = false; //enables function for MouseClicked gameplay (meets condition)
+        gameScreen();
+        noStroke();
+        //rect to blank out previous score
+        fill(255, 255, 255);
+        rect(8, 13, 776, 37);
+    
+    //text for Player Scores
+        textSize(20);
+        fill(245, 8, 59);
+        text("Player 1 Score: " + player1score, 20, 38);
+        fill(45, 10, 245);
+        text("Player 2 Score: " + player2score, 225, 38);
+    
+    //to call draw tiles
+    for (var i = 0; i < tiles.length; i++) {
+        tiles[i].draw();
+    }
+    if (checkWin()) {
+        background(94, 19, 19);
+    }
+    } else if (currentScene === 3) {
+        winScreen();
+    }
+};
