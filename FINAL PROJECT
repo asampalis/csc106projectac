@@ -256,19 +256,19 @@ var inst = function(){
     textSize(16);
     fill(107, 70, 17);
     //text
-    text("               The goal of the game is simple,\n            try to dig up more valuable treasure \n                         than your opponent.\n     Player 1 gets first move off the middle tile,\n                     either up or down!\nThe second player then gets to move side to side \n  within the row of your oponents last move \n                       The game ends when \n                  no more moves can be made\n                                Good Luck!",28,70);
+    text("               The goal of the game is simple,\n            try to dig up more valuable treasure \n                         than your opponent.\n         Player 1 gets first move off the middle tile,\n                          either up or down!\n  The second player then gets to move side to side \n        within the row of your oponents last move \n          after no more legal moves can be made \n                             it's a free for all\nThe game ends when no more moves can be made\n                                Good Luck!",16,70);
     
     //chest
     image(getImage("cute/ChestOpen"),160,242,94,127);
     //rays coming out of the chest
     fill(245, 230, 19);
     noStroke();
-    triangle(80,255,94,255,176,330);//1
-    triangle(121,255,138,255,192,330);//2
-    triangle(181,255,167,255,205,330);//3
-    triangle(220,255,235,255,213,331);//4
-    triangle(277,255,263,255,226,331);//5
-    triangle(330,255,313,255,236,331);//6
+    triangle(80,270,94,270,176,330);//1
+    triangle(121,270,138,270,192,330);//2
+    triangle(181,270,167,270,205,330);//3
+    triangle(220,270,235,270,213,331);//4
+    triangle(277,270,263,270,226,331);//5
+    triangle(330,270,313,270,236,331);//6
     
     //images
     image(getImage("cute/GemBlue"),23,318,55,55);
